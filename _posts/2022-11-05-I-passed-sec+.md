@@ -10,6 +10,7 @@ tags:
   - CompTIA
   - CompTIACertified
 ---
+> This exam was a fantastic learning experience, so I’m quite pleased with myself for taking it.
 
 >![CompTIA Security+ Certificate](https://i.imgur.com/3Yki161.png){:class="img-responsive"}
 
