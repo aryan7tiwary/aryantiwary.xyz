@@ -73,9 +73,7 @@ author:
     - label: "Discord"
       icon: "fab fa-fw fa-discord"
       url: "https://discord.com/users/721403353476628510"
-    - label: "Notes"
-      icon: "fa-solid fa-book"
-      url: "https://notes.aryantiwary.online"
+
 
 footer:
   links:
