@@ -67,12 +67,12 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/aryan7tiwary"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/aryan7tiwary"
     - label: "Discord"
       icon: "fab fa-fw fa-discord"
       url: "https://discord.com/users/721403353476628510"
+    - label: "Notes"
+      icon: "fab fa-fw fa-book"
+      url: "https://notes.aryantiwary.online"
 
 
 footer:
@@ -83,9 +83,6 @@ footer:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/aryan7tiwary"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/aryan7tiwary"
     - label: "Discord"
       icon: "fab fa-fw fa-discord"
       url: "https://discord.com/users/721403353476628510"
