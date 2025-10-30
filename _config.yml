@@ -70,9 +70,6 @@ author:
     - label: "Discord"
       icon: "fab fa-fw fa-discord"
       url: "https://discord.com/users/721403353476628510"
-    - label: "Notes"
-      icon: "fab fa-fw fa-book"
-      url: "https://notes.aryantiwary.xyz"
 
 
 footer:
@@ -86,9 +83,6 @@ footer:
     - label: "Discord"
       icon: "fab fa-fw fa-discord"
       url: "https://discord.com/users/721403353476628510"
-    - label: "Notes"
-      icon: "fab fa-fw fa-book"
-      url: "https://notes.aryantiwary.xyz"
 
 defaults:
   # _posts
