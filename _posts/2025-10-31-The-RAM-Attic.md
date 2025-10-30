@@ -12,7 +12,7 @@ tags:
   - dev_shm
 ---
 
->There’s a small place on every Linux machine I’ve come to respect: `/dev/shm`. I first noticed it in one of [Ippsec's video](https://www.youtube.com/channel/UCa6eh7gCkpPo5XXUDfygQQA) during my regular bing watching.
+>There’s a small corner of every Linux machine I’ve come to respect — /`dev/shm`. I first noticed it in one of [Ippsec’s videos](https://www.youtube.com/@ippsec) during a binge-watch session.
 
 ---
 
@@ -24,14 +24,14 @@ tags:
 ## What `/dev/shm` really is
 
 `/dev/shm` is a **temporary filesystem (tmpfs)** mounted in RAM.  
-Anything stored here lives entirely in memory, not on disk which means it’s:
+Anything stored here lives entirely in memory, which means it’s:
 
 - Extremely fast  
 - Automatically cleared on reboot or unmount  
 - Accessible to all users (by default `mode=1777`, like `/tmp`)  
 - Often ignored in traditional monitoring setups
 
-We can verify this ourself:
+You can verify this:
 
 ```bash
 $ mount | grep shm
@@ -48,7 +48,7 @@ Now let’s see why attackers (and defenders) both care so much about this innoc
 
 ## 1) Why attackers use `/dev/shm` after they get a foothold
 
-`/dev/shm` keeps appearing in post-exploitation because it checks every box for stealth and convenience.
+`/dev/shm` often appears in post-exploitation because it offers stealth and convenience.
 
 - **Speed & low latency** — it’s RAM-backed (`tmpfs`), so binaries and data staged here execute faster than from disk. Great for quick, in-memory payloads.  
 - **Ephemerality** — everything disappears on reboot. That’s perfect for short-lived tools or avoiding forensic traces.  
@@ -63,8 +63,7 @@ In short: `/dev/shm` is fast, volatile, and often invisible which makes it a per
 
 ## 2) Why defenders need to take `/dev/shm` seriously
 
-Anyone can ignore `/dev/shm`. It’s small, temporary, and seems harmless.  
-But once I started digging, I realized how powerful it can be for attackers.
+It’s easy to ignore `/dev/shm` — small, temporary, and seemingly harmless. But it can be surprisingly powerful for attackers.
 
 Here’s what defenders should note:
 
@@ -104,7 +103,7 @@ This prevents binaries from being executed directly out of `/dev/shm`.
 
 ### **2. Tighten permissions**
 
-Default permissions are `1777` (world-writable). We can reduce that surface if our workloads don’t require full public access:
+Default permissions are `1777` (world-writable). Reduce the surface if workloads don’t need full access:
 
 ```bash
 sudo chmod 0700 /dev/shm
@@ -134,7 +133,7 @@ ls -alh /dev/shm
 
 ### **4. In containers**
 
-For Docker containers, we can limit or disable shared memory mounts:
+In Docker, you can limit or disable shared memory mounts:
 
 ```bash
 docker run --shm-size=1m --tmpfs /dev/shm:rw,noexec,nosuid,nodev mycontainer
@@ -144,9 +143,9 @@ docker run --shm-size=1m --tmpfs /dev/shm:rw,noexec,nosuid,nodev mycontainer
 
 ## Final thoughts
 
-`/dev/shm` is one of those Linux components that sits quietly until we realize how powerful it is.  
+`/dev/shm` sits quietly until you realize how powerful it is.  
 Attackers love it because it’s **fast, ephemeral, and overlooked**.  
-Defenders should love it because **understanding it helps close a stealthy gap**.
+Defenders should understand it to close this stealthy gap.
 
 In short: if we don’t watch `/dev/shm`, someone else eventually will.
 
