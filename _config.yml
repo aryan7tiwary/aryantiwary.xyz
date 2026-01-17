@@ -22,6 +22,10 @@ github_username: aryan7tiwary
 minimal_mistakes_skin: default
 search: true
 
+# SEO plugin configuration - prevent appending site title
+seo:
+  title_separator: ""
+
 # Build settings
 markdown: kramdown
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"

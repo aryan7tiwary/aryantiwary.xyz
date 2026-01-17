@@ -1,0 +1,42 @@
+{%- assign title = page.title | default: site.title -%}
+{%- if title -%}
+  <title>{{ title }}</title>
+{%- endif -%}
+
+{%- assign description = page.description | default: page.excerpt | default: site.description -%}
+{%- if description -%}
+  <meta name="description" content="{{ description | strip_html | strip_newlines | truncate: 160 }}">
+{%- endif -%}
+
+{%- if page.author -%}
+  <meta name="author" content="{{ page.author }}">
+{%- elsif site.author.name -%}
+  <meta name="author" content="{{ site.author.name }}">
+{%- endif -%}
+
+<meta property="og:type" content="{% if page.collection == 'posts' %}article{% else %}website{% endif %}">
+<meta property="og:locale" content="{{ site.locale | default: 'en_US' }}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+
+{%- if description -%}
+  <meta property="og:description" content="{{ description | strip_html | strip_newlines | truncate: 200 }}">
+{%- endif -%}
+
+{%- if page.image -%}
+  <meta property="og:image" content="{{ page.image | absolute_url }}">
+{%- elsif site.author.avatar -%}
+  <meta property="og:image" content="{{ site.author.avatar | absolute_url }}">
+{%- endif -%}
+
+{%- if site.twitter.username -%}
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@{{ site.twitter.username }}">
+  <meta name="twitter:creator" content="@{{ site.twitter.username }}">
+{%- endif -%}
+
+<meta name="twitter:title" content="{{ title }}">
+{%- if description -%}
+  <meta name="twitter:description" content="{{ description | strip_html | strip_newlines | truncate: 200 }}">
+{%- endif -%}
