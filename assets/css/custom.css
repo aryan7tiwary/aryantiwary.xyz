@@ -1,0 +1,28 @@
+/* Make author avatar a perfect circle, smaller, and left-aligned */
+.author__avatar {
+  width: 120px !important;
+  height: 120px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
+  display: block !important;
+  position: relative !important;
+  float: none !important;
+}
+
+.author__avatar img {
+  width: 120px !important;
+  height: 120px !important;
+  max-width: 120px !important;
+  max-height: 120px !important;
+  min-width: 120px !important;
+  min-height: 120px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}

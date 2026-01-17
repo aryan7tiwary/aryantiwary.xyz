@@ -19,7 +19,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Join me on a captivating journey as a college freshman and cybersecurity enthusiast. Explore my blog's engaging write-ups on hacking challenges, personal experiences, and insightful fixes, all designed to fuel your passion for the dynamic world of cybersecurity. Let's dive into The Cybersecurity Chronicles together!
 twitter_username: aryan7tiwary
 github_username: aryan7tiwary
-minimal_mistakes_skin: neon
+minimal_mistakes_skin: default
 search: true
 
 # Build settings
