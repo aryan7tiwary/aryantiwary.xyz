@@ -1,4 +1,7 @@
 ---
+toc: true
+toc_sticky: true
+classes: wide
 title: "/dev/shm: The RAM Attic"
 date: 2025-10-31T02:41:00+05:30
 categories:
