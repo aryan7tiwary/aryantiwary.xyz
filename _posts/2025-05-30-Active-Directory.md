@@ -382,7 +382,7 @@ peterparker:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b94
 ---
 
 ## Gaining Shell Access
-### Metaspooit
+### Metasploit
 #### Using Password
 1. Metasploit's exploits are available, but they are too noisy, which often gets picked up by detection systems.
 * ```bash
