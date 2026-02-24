@@ -20,4 +20,4 @@ I regularly practice on platforms like <a href="https://app.hackthebox.com/publi
 
 Currently seeking Cybersecurity / SOC Analyst internships where I can contribute to real-world detection, monitoring, and response while continuing to grow as a security professional.
 
-Outside of my academics, I enjoy playing football. I did participate in many inter-school/college tournaments. Along with that, like working out and pushing my limits. Writing short security breakdowns either attack paths that I learn or weekly security news in my own words is something I like.
+Outside of my academics, I enjoy playing football. I did participate in many inter-school/college tournaments. Along with that, I like working out and pushing my limits. Writing short security breakdowns either attack paths that I learn or weekly security news in my own words is something I like.
